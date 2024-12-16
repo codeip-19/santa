@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas 2025 Greeting</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a4b3f, #0d2c24, #003b22);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        #santas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        #snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .santa {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-image: url("santaclaus.svg");
+            background-size: cover;
+            z-index: 3;
+            transition: all 2s ease;
+            transform-origin: center;
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Rest of the previous CSS remains the same */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ff4500;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            background: rgba(255, 69, 0, 0.2);
+            color: white;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #ff4500;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #ff6347;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .greeting-message {
+            text-align: center;
+        }
+
+        .greeting-message h1 {
+            font-size: 3.5rem;
+            color: #ff4500;
+        }
+
+        .greeting-message h2 {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        .greeting-message p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .greeting-message h2 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="santas-container"></div>
+    <div id="snow-container"></div>
+    <div id="app" class="container">
+        <div id="initial-form">
+            <h1>Merry Christmas 2025! 🎄</h1>
+            <form id="name-form">
+                <input type="text" id="name-input" placeholder="Enter your name" required>
+                <button type="submit">Unwrap My Greeting! 🎁</button>
+            </form>
+        </div>
+        <div id="greeting-section" style="display: none;">
+            <div class="greeting-message">
+                <h1>Merry Christmas</h1>
+                <h2 id="personalized-name">Name</h2>
+                <p>May your day be merry, bright, and filled with joy! 🎄</p>
+                <button id="reset-btn">Send Another Greeting 🎅</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MultipleSantasAnimation {
+            constructor(container) {
+                this.container = container;
+                this.santas = [];
+                this.santaCount = 20; // Increased number of Santas
+            }
+
+            createSantas() {
+                for (let i = 0; i < this.santaCount; i++) {
+                    const santa = document.createElement('div');
+                    santa.classList.add('santa');
+                    this.container.appendChild(santa);
+                    this.moveSanta(santa);
+                }
+            }
+
+            moveSanta(santa) {
+                const animate = () => {
+                    const containerWidth = this.container.clientWidth;
+                    const containerHeight = this.container.clientHeight;
+
+                    // Randomize Santa's position
+                    const x = Math.random() * (containerWidth - 100);
+                    const y = Math.random() * (containerHeight - 100);
+
+                    // Randomize Santa's size
+                    const size = Math.random() * 50 + 50; // 50 to 100 pixels
+                    santa.style.width = `${size}px`;
+                    santa.style.height = `${size}px`;
+
+                    // Animate to new position
+                    santa.style.transform = `translate(${x}px, ${y}px)`;
+
+                    // Reschedule the movement
+                    setTimeout(animate, (Math.random() * 5 + 5) * 1000);
+                };
+
+                animate();
+            }
+        }
+
+        // Snow Effect remains the same as in previous version
+        class SnowEffect {
+            constructor(container) {
+                this.container = container;
+                this.snowflakes = [];
+            }
+
+            createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+
+                const size = Math.random() * 5 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.opacity = Math.random();
+
+                const containerWidth = this.container.clientWidth;
+                const startX = Math.random() * containerWidth;
+                snowflake.style.left = `${startX}px`;
+                snowflake.style.top = '-10px';
+
+                this.container.appendChild(snowflake);
+                this.animateSnowflake(snowflake);
+            }
+
+            animateSnowflake(snowflake) {
+                const speed = Math.random() * 3 + 2;
+                const drift = Math.random() * 2 - 1;
+
+                const animation = snowflake.animate([
+                    { transform: 'translateY(0px) translateX(0px)' },
+                    { transform: `translateY(${window.innerHeight + 10}px) translateX(${drift * 100}px)` }
+                ], {
+                    duration: speed * 3000,
+                    easing: 'linear'
+                });
+
+                animation.onfinish = () => {
+                    this.container.removeChild(snowflake);
+                };
+            }
+
+            start() {
+                setInterval(() => {
+                    this.createSnowflake();
+                }, 200);
+            }
+        }
+
+        // Rest of the previous JavaScript remains the same
+        const nameForm = document.getElementById('name-form');
+        const initialForm = document.getElementById('initial-form');
+        const greetingSection = document.getElementById('greeting-section');
+        const nameInput = document.getElementById('name-input');
+        const personalizedName = document.getElementById('personalized-name');
+        const resetBtn = document.getElementById('reset-btn');
+        const santasContainer = document.getElementById('santas-container');
+        const snowContainer = document.getElementById('snow-container');
+
+        // Snow effect
+        const snowEffect = new SnowEffect(snowContainer);
+        snowEffect.start();
+
+        // Multiple Santas animation
+        const santasAnimation = new MultipleSantasAnimation(santasContainer);
+        santasAnimation.createSantas();
+
+        // Form submission and Firebase logic remains the same as in previous version
+        nameForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = nameInput.value.trim();
+
+            if (name) {
+                personalizedName.textContent = `${name}! 🎄`;
+                initialForm.style.display = 'none';
+                greetingSection.style.display = 'block';
+            }
+        });
+
+        resetBtn.addEventListener('click', function () {
+            greetingSection.style.display = 'none';
+            initialForm.style.display = 'block';
+            nameInput.value = '';
+        });
+    </script>
+</body>
+
+</html>
